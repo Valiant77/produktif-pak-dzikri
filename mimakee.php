@@ -1,61 +1,99 @@
 <!DOCTYPE html>
+<html lang="id">
 <head>
-    <html lang="id">
+  <meta charset="UTF-8">
+  <title>Laporan Barang Rusak</title>
 </head>
 <body>
 
 <h2>Form Laporan Barang Rusak di Gudang</h2>
-
-<form action="proses-barang-rusak.php" method="post" enctype="multipart/form-data">
-  Nama Petugas:<br>
+<form action="" method="post" enctype="multipart/form-data">
+  <label>Nama Petugas:</label><br>
   <input type="text" name="nama_petugas"><br><br>
-  ID Barang (SKU/Kode):<br>
-  <input type="text" name="id_barang"><br><br>
-  Nama Barang:<br>
-  <input type="text" name="nama_barang"><br><br>
-  Jumlah Barang Rusak:<br>
+  <label>Jam Laporan (HH:MM):</label><br>
+  <input type="time" name="jam_laporan" required><br><br>
+
+  <label>ID Barang:</label><br>
+  <select name="id_barang">
+    <option value="BRG001">BRG001</option>
+    <option value="BRG002">BRG002</option>
+    <option value="BRG003">BRG003</option>
+    <option value="BRG004">BRG004</option>
+    <option value="BRG005">BRG005</option>
+    <option value="BRG006">BRG006</option>
+    <option value="BRG007">BRG007</option>
+    <option value="BRG008">BRG008</option>
+    <option value="BRG009">BRG009</option>
+    <option value="BRG010">BRG010</option>
+  </select><br><br>
+
+  <label>Jumlah Rusak:</label><br>
   <input type="number" name="jumlah_rusak"><br><br>
-  Tanggal Ditemukan Rusak:<br>
-  <input type="date" name="tanggal"><br><br>
-  Lokasi Gudang:<br>
+  <label>Tanggal Ditemukan Rusak:</label><br>
+  <input type="date" name="tanggal" required><br><br>
+  <label>Lokasi Gudang:</label><br>
   <input type="text" name="lokasi_gudang"><br><br>
-  Penyebab Kerusakan:<br>
+  <label>Penyebab:</label><br>
   <input type="text" name="penyebab"><br><br>
-  
-  <input type="submit" value="Kirim Laporan">
+  <label>Upload Foto:</label><br>
+  <input type="file" name="foto"><br><br>
+
+  <input type="submit" value="Kirim">
 </form>
-
-</body>
-</html>
-
 
 <?php
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $nama_petugas = $_POST["nama_petugas"];
-    $id_barang = $_POST["id_barang"];
-    $nama_barang = $_POST["nama_barang"];
+    $barang = array(
+        "BRG001" => "Air Mineral Botol 600ml",
+        "BRG002" => "Roti Tawar",
+        "BRG003" => "Mie Instan Goreng",
+        "BRG004" => "Biskuit Kaleng",
+        "BRG005" => "Susu Kotak 1L",
+        "BRG006" => "Sapu Lantai",
+        "BRG007" => "Ember Plastik 20L",
+        "BRG008" => "Lampu LED 12W",
+        "BRG009" => "Panci Stainless 24cm",
+        "BRG010" => "Piring Keramik"
+    );
+
+    $nama = $_POST["nama_petugas"];
+    $id = $_POST["id_barang"];
+    $jam = $_POST["jam_laporan"];
+    $nama_barang = $barang[$id];
     $jumlah_rusak = $_POST["jumlah_rusak"];
-    $tanggal = $_POST["tanggal"];
-    $lokasi_gudang = $_POST["lokasi_gudang"];
+    $tgl = $_POST["tanggal"];
+    $lokasi = $_POST["lokasi_gudang"];
     $penyebab = $_POST["penyebab"];
+ 
+     // Menentukan shift dari jam
+    $jam_int = intval(substr($jam, 0, 2));
+    if ($jam_int >= 6 && $jam_int < 14) {
+        $shift = "Shift 1";
+    } elseif ($jam_int >= 14 && $jam_int < 22) {
+        $shift = "Shift 2";
+    } else {
+        $shift = "Shift 3";
+    }
 
 
-    echo "<h2>Data Laporan Anda:</h2>";
-    echo "Nama Petugas: " . $nama_petugas . "<br>";
-    echo "ID Barang: " . $id_barang . "<br>";
-    echo "Nama Barang: " . $nama_barang . "<br>";
-    echo "Jumlah Rusak: " . $jumlah_rusak . "<br>";
-    echo "Tanggal Ditemukan Rusak: " . $tanggal . "<br>";
-    echo "Lokasi Gudang: " . $lokasi_gudang . "<br>";
-    echo "Penyebab Kerusakan: " . $penyebab . "<br>";
+    // Simpan file foto
+    $nama_file = $_FILES["foto"]["name"];
+    move_uploaded_file($_FILES["foto"]["tmp_name"], $nama_file);
 
-
-
-    echo "<p>Baik, laporan Anda sudah kami terima. Kami akan memproses laporan ini dan menghubungi Anda dalam <strong>1x24 jam</strong>.</p>";
+    // Tampilkan hasil
+    echo "<h2>Data Laporan:</h2>";
+    echo "<table border='1' cellpadding='8'>";
+    echo "<tr><td>Nama Petugas</td><td>$nama</td></tr>";
+    echo "<tr><td>Shift</td><td>$shift</td></tr>";
+    echo "<tr><td>ID Barang</td><td>$id</td></tr>";
+    echo "<tr><td>Nama Barang</td><td>$nama_barang</td></tr>";
+    echo "<tr><td>Jumlah Rusak</td><td>$jumlah_rusak</td></tr>";
+    echo "<tr><td>Lokasi</td><td>$lokasi</td></tr>";
+    echo "<tr><td>Penyebab</td><td>$penyebab</td></tr>";
+    echo "<tr><td>Foto Barang</td><td><img src='$nama_file' width='150'></td></tr>";
+    echo "</table>";
 }
 ?>
 
-<br>
-<a href="form-barang-rusak.html">Laporkan Lagi</a>
-
-
+</body>
+</html>
