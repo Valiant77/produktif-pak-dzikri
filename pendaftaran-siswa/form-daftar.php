@@ -15,7 +15,7 @@
 
         <p>
             <label for="nama">Nama: </label>
-            <input type="text" name="nama" placeholder="nama lengkap" />
+            <input type="text" name="nama" placeholder="Nama Lengkap" />
         </p>
         <p>
             <label for="alamat">Alamat: </label>
@@ -32,21 +32,19 @@
                 <option>Islam</option>
                 <option>Kristen</option>
                 <option>Hindu</option>
-                <option>Budha</option>
-                <option>Atheis</option>
+                <option>Buddha</option>
+                <option>Konghuchu</option>
+                <option>Lainnya</option>
             </select>
         </p>
         <p>
             <label for="sekolah_asal">Sekolah Asal: </label>
-            <input type="text" name="sekolah_asal" placeholder="nama sekolah" />
+            <input type="text" name="sekolah_asal" placeholder="Nama Sekolah" />
         </p>
         <p>
             <input type="submit" value="Daftar" name="daftar" />
         </p>
-
         </fieldset>
-
     </form>
-
     </body>
 </html>
